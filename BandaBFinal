@@ -1,0 +1,23 @@
+CREATE TABLE registro (
+    id bigint NOT NULL,
+    tec character varying,
+    responsable character varying,
+    instructor character varying,
+primary key (id)
+);
+
+CREATE TABLE rbackup (
+    id bigint NOT NULL,
+    tec character varying,
+    responsable character varying,
+    instructor character varying,
+primary key (id)
+);
+
+CREATE TABLE rrandom (
+    id bigint NOT NULL,
+    tec character varying,
+    responsable character varying,
+    instructor character varying,
+primary key (id)
+);
