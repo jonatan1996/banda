@@ -50,9 +50,9 @@ use yii\debug\Toolbar;
           array('label' => 'Inicio', 'url' => array('/site/index')),
           array('label' => 'Registro', 'url' => array('/registro/create')),
           //array('label' => 'Contact', 'url' => array('/site/contact')),
-          //Yii::$app->user->isGuest ?
-            //array('label' => 'Login', 'url' => array('/site/login')) :
-            //array('label' => 'Logout (' . Yii::$app->user->identity->username .')' , 'url' => array('/site/logout')),
+          Yii::$app->user->isGuest ?
+            array('label' => 'Login', 'url' => array('/site/login')) :
+            array('label' => 'Logout (' . Yii::$app->user->identity->username .')' , 'url' => array('/site/logout')),
         ),
       )); ?>
     <div class="clear"></div>
