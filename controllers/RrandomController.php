@@ -14,13 +14,12 @@ use yii\helpers\Html;
 /**
  * RrandomController implements the CRUD actions for Rrandom model.
  */
-class RrandomController extends Controller
-{
+class RrandomController extends Controller {
+
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -36,39 +35,64 @@ class RrandomController extends Controller
      * Lists all Rrandom models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        $searchModel = new RrandomSearch();
+    public function actionIndex() {
+        $searchModel = new \app\models\RegistroSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $searchModel1 = new \app\models\RrandomSearch();
+        $dataProvider1 = $searchModel1->search(Yii::$app->request->queryParams);
+
+        \app\models\Rrandom::deleteAll();
+        $max = \app\models\Registro::find()->max('id');
+
+        $salidos = [];
+        for ($i = 0; $i < $max; $i++) {
+            $random = 0;
+            do {
+                $random = rand(1, $max);
+            } while (array_search($random, $salidos) !== false);
+
+
+            $one = \app\models\Registro::findOne(['id' => $random]);
+            $nuevo = new Rrandom();
+            $nuevo->id = $i + 1;
+            $nuevo->tec_backup = $one->tec;
+            $nuevo->responsable = $one->responsable;
+            $nuevo->instructor = $one->instructor;
+            $nuevo->save();
+            \Yii::warning($nuevo->getErrors());
+            $salidos[] = $random;
+        }
+        \Yii::warning(print_r($salidos, true));
+
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                    'searchModel1' => $searchModel1,
+                    'dataProvider1' => $dataProvider1,
         ]);
     }
-
 
     /**
      * Displays a single Rrandom model.
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
         $request = Yii::$app->request;
-        if($request->isAjax){
+        if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "Rrandom #".$id,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $this->findModel($id),
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];
-        }else{
+                'title' => "Rrandom #" . $id,
+                'content' => $this->renderAjax('view', [
+                    'model' => $this->findModel($id),
+                ]),
+                'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                Html::a('Edit', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+            ];
+        } else {
             return $this->render('view', [
-                'model' => $this->findModel($id),
+                        'model' => $this->findModel($id),
             ]);
         }
     }
@@ -79,59 +103,54 @@ class RrandomController extends Controller
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $request = Yii::$app->request;
         $model = new Rrandom();
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
-            *   Process for ajax request
-            */
+             *   Process for ajax request
+             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($request->isGet){
+            if ($request->isGet) {
                 return [
-                    'title'=> "Create new Rrandom",
-                    'content'=>$this->renderAjax('create', [
+                    'title' => "Create new Rrandom",
+                    'content' => $this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
-            }else if($model->load($request->post()) && $model->save()){
+            } else if ($model->load($request->post()) && $model->save()) {
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Create new Rrandom",
-                    'content'=>'<span class="text-success">Create Rrandom success</span>',
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-
+                    'forceReload' => '#crud-datatable-pjax',
+                    'title' => "Create new Rrandom",
+                    'content' => '<span class="text-success">Create Rrandom success</span>',
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::a('Create More', ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
                 ];
-            }else{
+            } else {
                 return [
-                    'title'=> "Create new Rrandom",
-                    'content'=>$this->renderAjax('create', [
+                    'title' => "Create new Rrandom",
+                    'content' => $this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
             }
-        }else{
+        } else {
             /*
-            *   Process for non-ajax request
-            */
+             *   Process for non-ajax request
+             */
             if ($model->load($request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('create', [
-                    'model' => $model,
+                            'model' => $model,
                 ]);
             }
         }
-
     }
 
     /**
@@ -141,54 +160,53 @@ class RrandomController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $request = Yii::$app->request;
         $model = $this->findModel($id);
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
-            *   Process for ajax request
-            */
+             *   Process for ajax request
+             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($request->isGet){
+            if ($request->isGet) {
                 return [
-                    'title'=> "Update Rrandom #".$id,
-                    'content'=>$this->renderAjax('update', [
+                    'title' => "Update Rrandom #" . $id,
+                    'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
-            }else if($model->load($request->post()) && $model->save()){
+            } else if ($model->load($request->post()) && $model->save()) {
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Rrandom #".$id,
-                    'content'=>$this->renderAjax('view', [
+                    'forceReload' => '#crud-datatable-pjax',
+                    'title' => "Rrandom #" . $id,
+                    'content' => $this->renderAjax('view', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::a('Edit', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
                 ];
-            }else{
-                 return [
-                    'title'=> "Update Rrandom #".$id,
-                    'content'=>$this->renderAjax('update', [
+            } else {
+                return [
+                    'title' => "Update Rrandom #" . $id,
+                    'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
             }
-        }else{
+        } else {
             /*
-            *   Process for non-ajax request
-            */
+             *   Process for non-ajax request
+             */
             if ($model->load($request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('update', [
-                    'model' => $model,
+                            'model' => $model,
                 ]);
             }
         }
@@ -201,85 +219,62 @@ class RrandomController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $request = Yii::$app->request;
         $this->findModel($id)->delete();
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
-            *   Process for ajax request
-            */
+             *   Process for ajax request
+             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
+            return ['forceClose' => true, 'forceReload' => '#crud-datatable-pjax'];
+        } else {
             /*
-            *   Process for non-ajax request
-            */
+             *   Process for non-ajax request
+             */
             return $this->redirect(['index']);
         }
-
-
     }
 
-     /**
+    /**
      * Delete multiple existing Rrandom model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
-    public function actionBulkDelete()
-    {
+    public function actionBulkDelete() {
         $request = Yii::$app->request;
-        $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
-        foreach ( $pks as $pk ) {
+        $pks = explode(',', $request->post('pks')); // Array or selected records primary keys
+        foreach ($pks as $pk) {
             $model = $this->findModel($pk);
             $model->delete();
         }
 
-        if($request->isAjax){
+        if ($request->isAjax) {
             /*
-            *   Process for ajax request
-            */
+             *   Process for ajax request
+             */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
+            return ['forceClose' => true, 'forceReload' => '#crud-datatable-pjax'];
+        } else {
             /*
-            *   Process for non-ajax request
-            */
+             *   Process for non-ajax request
+             */
             return $this->redirect(['index']);
         }
-
     }
 
-public function actionRandom() {
-  $connection = Yii::$app->getDb();
-  $command = $connection->createCommand("
-  insert into rrandom (select * from rbackup limit 1)");
-  $command2 = $connection->createCommand("
-  DELETE FROM rbackup WHERE id IN (SELECT id FROM rbackup LIMIT 1)");
-
-  $result = $command->queryAll();
-  $result = $command2->queryAll();
-
-        $this->redirect(array('/sorteo'));
-
-
-    	}
-
-      public function actionSorteo() {
+    public function actionCerrar() {
         $connection = Yii::$app->getDb();
         $command = $connection->createCommand("
         insert into rbackup (select * from registro)");
 
         $result = $command->queryAll();
 
-              $this->redirect(array('/rrandom'));
-
-
-          	}
-
+        $this->redirect(array('/rrandom'));
+    }
 
     /**
      * Finds the Rrandom model based on its primary key value.
@@ -288,12 +283,12 @@ public function actionRandom() {
      * @return Rrandom the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = Rrandom::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

@@ -12,26 +12,24 @@ use Yii;
  * @property string $responsable
  * @property string $instructor
  */
-class Rrandom extends \yii\db\ActiveRecord
-{
+class Rrandom extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'rrandom';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['id'], 'required'],
             [['id'], 'default', 'value' => null],
             [['id'], 'integer'],
-            [['tec', 'responsable', 'instructor'], 'string'],
+            [['tec', 'tec_backup', 'responsable', 'instructor'], 'string'],
             [['id'], 'unique'],
         ];
     }
@@ -39,8 +37,7 @@ class Rrandom extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => Yii::t('app', 'ID'),
             'tec' => Yii::t('app', 'Tec'),
@@ -48,4 +45,5 @@ class Rrandom extends \yii\db\ActiveRecord
             'instructor' => Yii::t('app', 'Instructor'),
         ];
     }
+
 }

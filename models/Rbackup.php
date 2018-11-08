@@ -12,21 +12,19 @@ use Yii;
  * @property string $responsable
  * @property string $instructor
  */
-class Rbackup extends \yii\db\ActiveRecord
-{
+class Rbackup extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'rbackup';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['id'], 'required'],
             [['id'], 'default', 'value' => null],
@@ -39,8 +37,7 @@ class Rbackup extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => Yii::t('app', 'ID'),
             'tec' => Yii::t('app', 'Tec'),
@@ -48,4 +45,5 @@ class Rbackup extends \yii\db\ActiveRecord
             'instructor' => Yii::t('app', 'Instructor'),
         ];
     }
+
 }

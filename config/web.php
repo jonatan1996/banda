@@ -5,43 +5,43 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
-    'name'=>'Instituto Tecnologico Superior de Escárcega',
+    'name' => 'Instituto Tecnologico Superior de Escárcega',
     'language' => 'es',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'modules' => [
-   'gridview' =>  [
-        'class' => '\kartik\grid\Module'
-    ]
-],
+        'gridview' => [
+            'class' => '\kartik\grid\Module'
+        ]
+    ],
     'components' => [
-      'user' => [
+        'user' => [
             'identityClass' => 'app\models\User',
         ],
-      'urlManager' => [
-        'class' => 'yii\web\UrlManager',
-        // Hide index.php
-        'showScriptName' => false,
-        // Use pretty URLs
-        'enablePrettyUrl' => true,
-        'rules' => [
+        'urlManager' => [
+            'class' => 'yii\web\UrlManager',
+            // Hide index.php
+            'showScriptName' => false,
+            // Use pretty URLs
+            'enablePrettyUrl' => true,
+            'rules' => [
+            ],
         ],
-    ],
-'view'=>[
-    'theme' => [
-        'pathMap' => [
-            '@app/views' =>[
-                '@app/themes/open',
-                '@app/themes/open'
-            ]
+        'view' => [
+            'theme' => [
+                'pathMap' => [
+                    '@app/views' => [
+                        '@app/themes/open',
+                        '@app/themes/open'
+                    ]
+                ],
+                'baseUrl' => '@web/../themes/open',
+            ],
         ],
-        'baseUrl' => '@web/../themes/open',
-        ],
-    ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'yes',
@@ -73,32 +73,31 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
-        ],
-        */
+    /*
+      'urlManager' => [
+      'enablePrettyUrl' => true,
+      'showScriptName' => false,
+      'rules' => [
+      ],
+      ],
+     */
     ],
     'params' => $params,
 ];
 
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
-  //  $config['bootstrap'][] = 'debug';
-    //$config['modules']['debug'] = [
-      //  'class' => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
-    //];
+    $config['bootstrap'][] = 'debug';
+    $config['modules']['debug'] = [
+        'class' => 'yii\debug\Module',
+        'allowedIPs' => ['127.0.0.1', '::1'],
+    ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+            // uncomment the following to add your IP if you are not connecting from localhost.
+            //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }
 
