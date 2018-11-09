@@ -5,23 +5,23 @@ namespace app\models;
 class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
 {
     public $id;
-    public $username;
-    public $password;
+    public $usuario;
+    public $contraseña;
     public $authKey;
     public $accessToken;
 
     private static $users = [
         '100' => [
             'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
+            'usuario' => 'admin',
+            'contraseña' => 'admin',
             'authKey' => 'test100key',
             'accessToken' => '100-token',
         ],
         '101' => [
             'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
+            'usuario' => 'demo',
+            'contraseña' => 'demo',
             'authKey' => 'test101key',
             'accessToken' => '101-token',
         ],
@@ -56,10 +56,10 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      * @param string $username
      * @return static|null
      */
-    public static function findByUsername($username)
+    public static function findByUsuario($usuario)
     {
         foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
+            if (strcasecmp($user['usuario'], $usuario) === 0) {
                 return new static($user);
             }
         }
@@ -97,8 +97,8 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      * @param string $password password to validate
      * @return bool if password provided is valid for current user
      */
-    public function validatePassword($password)
+    public function validateContraseña($contraseña)
     {
-        return $this->password === $password;
+        return $this->contraseña === $contraseña;
     }
 }
