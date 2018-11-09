@@ -15,17 +15,20 @@ $this->title = Yii::t('app', 'Resultado de Sorteo');
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
+\app\assets\AppAsset::register($this);
 ?>
 
+<div>
+    <img id="tombola" src="<?= Yii::getAlias('@web') ?>/img/tombola.gif" style="display: none; position: absolute; margin: auto; left: 0; right: 0; text-align: center; z-index: 1;"/>
+</div>
 <div class="row">
     <div class="col-lg-6">
         <div class="rrandom-index">
             <div id="ajaxCrudDatatable">
                 <?=
                 GridView::widget([
-                    'id' => 'crud-datatable',
+                    'id' => 'crud-datatable-original',
                     'dataProvider' => $dataProvider,
-                    'filterModel' => $searchModel,
                     'pjax' => true,
                     'columns' => require(__DIR__ . '/_columns.php'),
                     'toolbar' => [
@@ -64,9 +67,8 @@ CrudAsset::register($this);
             <div id="ajaxCrudDatatable">
                 <?=
                 GridView::widget([
-                    'id' => 'crud-datatable',
+                    'id' => 'crud-datatable-random',
                     'dataProvider' => $dataProvider1,
-                    'filterModel' => $searchModel1,
                     'pjax' => true,
                     'columns' => require(__DIR__ . '/_columns_1.php'),
                     'toolbar' => [

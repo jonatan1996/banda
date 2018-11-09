@@ -60,10 +60,8 @@ class RrandomController extends Controller {
             $nuevo->responsable = $one->responsable;
             $nuevo->instructor = $one->instructor;
             $nuevo->save();
-            \Yii::warning($nuevo->getErrors());
             $salidos[] = $random;
         }
-        \Yii::warning(print_r($salidos, true));
 
         return $this->render('index', [
                     'searchModel' => $searchModel,
